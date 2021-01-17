@@ -87,9 +87,8 @@ class CategoryController extends Controller
             'slug'  =>  "required|unique:categories,slug,$category->id",
         ]);
         $category->update($request->all());
-        //$category=new Category($request->all());
-        //$category->save();
-        return redirect()->route('admin.categories.edit',$category)->with('toast_success','Se edito correctamente!!!');
+        //return redirect()->route('admin.categories.edit',$category)->with('toast_success','Se edito correctamente!!!');
+        return redirect()->route('admin.categories.index')->with('toast_success','Se edito correctamente!!!');;
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('plugins.Select2',true)
 
-@section('title', 'Nueva Etiqueta')
+@section('title', 'Editar Etiqueta')
 
 @section('content_header')
     
@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
         
         <div class="card" style="width: 50em;">
-            <h1>Nueva Etiqueta</h1>
+            <h1>Editar Etiqueta</h1>
             <div class="card-body">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -21,13 +21,14 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
-                <form method="POST" action="{{ route('admin.tags.store') }}">
+                @endif                
+                <form method="POST" action="{{ route('admin.tags.update',$tag) }}">
+                    {{ method_field('PUT') }}
                     <input name="_token" id="_token" value="{{ csrf_token() }}" type="hidden">
                     <div class="form-group">
                         <label for="name" class="col col-form-label text-md-left">Nombre<span style="color:red_display:bl">*</span></label>
                         <div class="col">
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required>
+                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $tag->name }}" required>
                             @error('nombre')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -39,7 +40,7 @@
                     <div class="form-group">
                         <label for="slug" class="col col-form-label text-md-left">Slug<span style="color:red">*</span></label>
                         <div class="col">
-                            <input id="slug" type="text" class="form-control @error('name') is-invalid @enderror" name="slug" value="{{ old('slug') }}" readonly required>
+                            <input id="slug" type="text" class="form-control @error('name') is-invalid @enderror" name="slug" value="{{ $tag->slug }}" readonly required>
                             @error('slug')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -50,8 +51,8 @@
                     <div class="form-group">
                         <label for="color" class="col col-form-label text-md-left">Color<span style="color:red">*</span></label>
                         <select class="form-control" id="color" name="color">
-                            <option value="pink">Seleccionar</option>
-                            <option value="pink">pink</option>
+                            <option >Seleccionar</option>
+                            <option value="pink" {!! ($tag->color=='pink')?'selected':'' !!}>pink</option>
                             <option value="blue">blue</option>
                             <option value="green">green</option>
                             <option value="red">red</option>

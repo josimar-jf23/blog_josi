@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -14,7 +15,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.tags.index');
     }
 
     /**
@@ -24,7 +25,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.tags.create');
     }
 
     /**
@@ -35,7 +36,16 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request);
+        $request->validate([
+            'name'  =>  'required',
+            'slug'  =>  'required|unique:categories,slug',
+            'color' =>  'required',
+        ]);
+        Tag::create($request->all());
+        //$category=new Category($request->all());
+        //$category->save();
+        return redirect()->route('admin.tags.index')->with('toast_success','Se creo correctamente!!!');
     }
 
     /**
@@ -55,9 +65,9 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Tag $tag)
     {
-        //
+        return view('admin.tags.edit',compact('tag'));
     }
 
     /**
@@ -67,9 +77,16 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, Tag $tag)
+    {        
+        $request->validate([
+            'name'  =>  'required',
+            'slug'  =>  "required|unique:tags,slug,$tag->id",
+        ]);
+        
+        $tag->update($request->all());
+        //return redirect()->route('admin.tags.edit',$tag)->with('toast_success','Se edito correctamente!!!');
+        return redirect()->route('admin.tags.index')->with('toast_success','Se edito correctamente!!!');
     }
 
     /**
@@ -78,8 +95,9 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return redirect()->route('admin.tags.index')->with('toast_success','Se elimino correctamente!!!');;
     }
 }
